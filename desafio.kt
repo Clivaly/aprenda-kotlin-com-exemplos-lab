@@ -1,21 +1,56 @@
 // [Template no Kotlin Playground](https://pl.kotl.in/WcteahpyN)
 
-enum class Nivel { BASICO, INTERMEDIARIO, DIFICIL }
+enum class Nivel { BASICO, INTERMEDIARIO, AVANCADO }
 
-class Usuario
+class Usuario(val nome: String, var email: String, var idade: Int) {
+    fun atualizarEmail(novoEmail: String) {
+        this.email = novoEmail
+    }
 
-data class ConteudoEducacional(var nome: String, val duracao: Int = 60)
-
-data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>) {
-
-    val inscritos = mutableListOf<Usuario>()
-    
-    fun matricular(usuario: Usuario) {
-        TODO("Utilize o parâmetro $usuario para simular uma matrícula (usar a lista de $inscritos).")
+    fun atualizarIdade(novaIdade: Int) {
+        this.idade = novaIdade
     }
 }
 
+data class ConteudoEducacional(
+    var nome: String,
+    var duracao: Int = 60,
+    var descricao: String = ""    
+) {
+    fun atualizarDuracao(novaDuracao: Int) {
+        this.duracao = novaDuracao
+    }
+
+    fun atualizarDescricao(novaDescricao: String) {
+        this.descricao = novaDescricao
+    }   
+}
+
+data class Formacao(val nome: String, var conteudos: List<ConteudoEducacional>, val nivel: Nivel) {
+    val inscritos = mutableListOf<Usuario>()
+
+    fun matricular(usuario: Usuario) {
+        if (!inscritos.contains(usuario)) {
+            inscritos.add(usuario)            
+            println("Usuário ${usuario.nome} matriculado na formação '$nome' (Nível: $nivel).")
+        } else {
+            println("Usuário ${usuario.nome} já matriculado nesta formação.")
+        }
+    }   
+
+    fun listarInscritos(): List<Usuario> {
+        return inscritos.toList()
+    }  
+}
+
 fun main() {
-    TODO("Analise as classes modeladas para este domínio de aplicação e pense em formas de evoluí-las.")
-    TODO("Simule alguns cenários de teste. Para isso, crie alguns objetos usando as classes em questão.")
+    val conteudo1 = ConteudoEducacional("Introdução à Programação", 90)
+    val conteudo2 = ConteudoEducacional("Estruturas de Dados", 120)
+    val formacao = Formacao("Formação em Ciência da Computação", listOf(conteudo1, conteudo2), Nivel.INTERMEDIARIO)
+
+    val usuario1 = Usuario("Alice", "alice@example.com", 25)
+    val usuario2 = Usuario("Bob", "bob@example.com", 30)
+
+    formacao.matricular(usuario1)
+    formacao.matricular(usuario2)   
 }
